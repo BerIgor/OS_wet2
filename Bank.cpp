@@ -39,7 +39,6 @@ int main(int argc, char* argv[]){
 	pthread_t ATMs[ATMCount];
 	int trErr;
 	for(int i=0; i< ATMCount; i++){
-		printf("it %d\n", i);
 		trErr=pthread_create(&ATMs[i], NULL, ATMOperator, argv[2+i]);
 		if(trErr!=0){
 			printf("ERROR\n");	//TODO: handle error
@@ -51,7 +50,6 @@ int main(int argc, char* argv[]){
 	//NOTE: unless we wait- results may vary
 	//wait for ATM threads to end
 	for(int i=0; i< ATMCount; i++){
-		printf("waiting for thread %d\n", i);
 		pthread_join(ATMs[i], NULL);
 	}
 

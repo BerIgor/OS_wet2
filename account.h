@@ -7,6 +7,7 @@ public:
 	int accountPassword;
 	int accountBalance;
 
+	//TODO: change to include mutex
 	Account(int _accountNumber, int _accountPassword, int _accountBalance) :
 			accountNumber(_accountNumber), accountPassword(_accountPassword), accountBalance(_accountBalance){}
 
