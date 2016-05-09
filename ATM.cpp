@@ -5,6 +5,8 @@
 #include <stdlib.h>	//required for exit()
 #include <iostream> //required for std::cout
 
+
+
 using namespace std;
 
 bool checkPassword(int providedPassword){
@@ -13,13 +15,16 @@ bool checkPassword(int providedPassword){
 }
 
 
-void* ATMOperator(void* inputFileName){
+void* ATMOperator(void* inputData){
+
+	ATMData* data_ptr=static_cast<ATMData*>(inputData);
+
+	cout << (data_ptr->getInputFileName()).c_str() << "  " << data_ptr->getID() << endl;
 	ifstream fs;
-	fs.open((char*)inputFileName);
+	fs.open((data_ptr->getInputFileName()).c_str());
 	string cmdLine;
 
-	while (getline(fs, cmdLine))
-	{
+	while (getline(fs, cmdLine)){
 		string args[5];
 		int ind=0;
 		size_t pos;
@@ -40,6 +45,8 @@ void* ATMOperator(void* inputFileName){
 			int initialAmount=atoi(args[3].c_str());
 			map<int, Account>::iterator desiredAccount = accounts.find(accountNumber);
 			if(desiredAccount!=accounts.end()){
+				printf("ERROR: account already exists\n");
+
 				//TODO: handle account already exists
 			}
 			//add account

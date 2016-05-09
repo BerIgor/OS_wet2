@@ -12,21 +12,27 @@
 #include "ATM.h"
 
 
-std::map<int, Account> accounts;
-//testing testing
+using namespace std;
+
+//*******************MUTEX*******************************
+pthread_mutex_t logMutex;
+//*******************************************************
+
+
+map<int, Account> accounts;
 
 /*
  *Input: arg#1 is # of ATMs
  *Input: arg#2 ... #ofATMs are input file names
  */
-using namespace std;
+
 int main(int argc, char* argv[]){
 
-
-	//create ouput file
-	fstream outputFile ("log.txt", fstream::out);	//NOTE: this also creates the file. Will overwrite
-
-
+	//check insufficient parameters
+	if(argc<2){
+		printf("ERROR\n");	//TODO: handle error
+		return -1;
+	}
 	//handle input
 	//NOTE: argv[0] is prog. name; argv[1] is atm count; argv[2] is first file
 	int ATMCount=atoi(argv[1]);
@@ -35,11 +41,24 @@ int main(int argc, char* argv[]){
 		return -1;
 	}
 
+
+	//initialize mutex'es
+	pthread_mutex_init(&logMutex, NULL);
+
+
+	//create ouput file
+	fstream outputFile ("log.txt", fstream::out);	//NOTE: this also creates the file. Will overwrite
+
 	//create threads for each ATM
-	pthread_t ATMs[ATMCount];
+	ATMData dataForATMs[ATMCount];	//array to hold data (so as to not lose it)
+	pthread_t ATMs[ATMCount];		//array to hold threads
 	int trErr;
 	for(int i=0; i< ATMCount; i++){
-		trErr=pthread_create(&ATMs[i], NULL, ATMOperator, argv[2+i]);
+		//update data array
+		dataForATMs[i].setID(i);
+		dataForATMs[i].setInputFileName(argv[2+i]);
+		//create thread
+		trErr=pthread_create(&ATMs[i], NULL, ATMOperator, &dataForATMs[i]);
 		if(trErr!=0){
 			printf("ERROR\n");	//TODO: handle error
 			return -1;
