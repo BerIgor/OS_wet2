@@ -26,6 +26,9 @@ public:
 		pthread_mutex_destroy(&readLock);
 	}
 
+//	Account& transfer(Account& targetAccount){
+//
+//	}
 
 };
 
