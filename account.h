@@ -21,7 +21,10 @@ public:
 		pthread_mutex_init(&readLock, NULL);
 	}
 
-
+	~Account(){
+		pthread_mutex_destroy(&writeLock);
+		pthread_mutex_destroy(&readLock);
+	}
 
 
 };
