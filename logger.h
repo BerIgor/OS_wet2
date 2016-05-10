@@ -5,6 +5,9 @@
 #include <pthread.h>
 
 
+
+extern pthread_mutex_t logMutex;
+
 enum LogType {
 	BAD_O,			//account open failed
 	BAD_D,			//deposit failed
@@ -14,17 +17,15 @@ enum LogType {
 	BAD_T_PASSWORD, //transfer failed - wrong password
 	BAD_T_BALANCE,	//transfer failed - insufficient funds
 
-	OK_O,
-	OK_D,
-	OK_W,
-	OK_B,
-	OK_T
+	OK_O,			//open okay
+	OK_D,			//deposit okay
+	OK_W,			//withdraw okay
+	OK_B,			//balance okay
+	OK_T			//transfer okay
 };
 
-extern pthread_mutex_t logMutex;
-
 class LogData{
-private:
+public:
 	int atmID;
 	int id;
 	int password;
@@ -33,15 +34,24 @@ private:
 	int targetID;
 	int targetBalance;
 	LogType type;
-	//put here all the shit
-public:	//TODO: finish
-	LogData(int _atmID, int _id, int _password, int _balance){};
+
+	LogData(int _atmID, int _id, int _password, int _balance, \
+				int _amount, int _targetID, int _targetBalance, LogType _type){
+		atmID=_atmID;
+		id=_id;
+		password=_password;
+		balance=_balance;
+		amount=_amount;
+		targetID=_targetID;
+		targetBalance=_targetBalance;
+		type=_type;
+	};
 };
 
 
 /*
  *Name:	writeToLog
- *Description: Used to write to log.txt. Designed to be called in parallel
+ *Description: Used to write to log.txt
  *Parameters: data contains all data that might be needed, including type of data
  *Return: N/A
  */

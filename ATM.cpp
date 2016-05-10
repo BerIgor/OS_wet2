@@ -1,4 +1,5 @@
 #include "ATM.h"
+#include "logger.h"
 #include <stdio.h>
 #include <string>
 #include <fstream>
@@ -17,11 +18,11 @@ bool checkPassword(int providedPassword){
 
 void* ATMOperator(void* inputData){
 
-	ATMData* data_ptr=static_cast<ATMData*>(inputData);
+	ATMData* ATMdata_ptr=static_cast<ATMData*>(inputData);
 
-	cout << (data_ptr->getInputFileName()).c_str() << "  " << data_ptr->getID() << endl;
+	cout << (ATMdata_ptr->getInputFileName()).c_str() << "  " << ATMdata_ptr->getID() << endl;
 	ifstream fs;
-	fs.open((data_ptr->getInputFileName()).c_str());
+	fs.open((ATMdata_ptr->getInputFileName()).c_str());
 	string cmdLine;
 
 	while (getline(fs, cmdLine)){
@@ -47,6 +48,9 @@ void* ATMOperator(void* inputData){
 			if(desiredAccount!=accounts.end()){
 				printf("ERROR: account already exists\n");
 
+				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
+						-1, -1, -1,  BAD_O);
+				writeToLog((void*)data);
 				//TODO: handle account already exists
 			}
 			//add account
