@@ -18,7 +18,7 @@ using namespace std;
 pthread_mutex_t logMutex;
 //*******************************************************
 
-
+extern bool allDone;
 map<int, Account> accounts;
 
 /*
@@ -27,7 +27,7 @@ map<int, Account> accounts;
  */
 
 int main(int argc, char* argv[]){
-
+	bool allDone=false;
 	//check insufficient parameters
 	if(argc<2){
 		printf("ERROR\n");	//TODO: handle error
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]){
 	for(int i=0; i< ATMCount; i++){
 		pthread_join(ATMs[i], NULL);
 	}
-
+	allDone=true;
 
 	//close output file
 	outputFile.close();
