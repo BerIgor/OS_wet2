@@ -16,6 +16,7 @@ enum LogType {
 	BAD_B,			//balance query failed
 	BAD_T_PASSWORD, //transfer failed - wrong password
 	BAD_T_BALANCE,	//transfer failed - insufficient funds
+	BAD_ACCOUNT,
 
 	OK_O,			//open okay
 	OK_D,			//deposit okay
