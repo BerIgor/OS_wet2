@@ -1,7 +1,7 @@
 #ifndef ATM_H_
 #define ATM_H_
 
-#include <map>
+
 #include "account.h"
 #include <string>
 
@@ -40,7 +40,7 @@ public:
 };
 
 
-extern std::map<int, Account> accounts;
+
 
 void* ATMOperator(void* inputData);
 

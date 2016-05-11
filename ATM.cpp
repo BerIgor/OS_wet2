@@ -1,5 +1,6 @@
 #include "ATM.h"
 #include "logger.h"
+#include "account.h"
 #include <stdio.h>
 #include <string>
 #include <fstream>

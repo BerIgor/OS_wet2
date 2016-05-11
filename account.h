@@ -2,6 +2,8 @@
 #define ACCOUNT_H_
 /*bla bla bla*/
 #include <pthread.h>
+#include <map>
+
 
 using namespace std;
 
@@ -33,5 +35,6 @@ public:
 };
 
 
+extern map<int, Account> accounts;
 
 #endif /* ACCOUNT_H_ */
