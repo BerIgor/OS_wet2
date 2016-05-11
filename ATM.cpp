@@ -6,7 +6,7 @@
 #include <fstream>
 #include <stdlib.h>	//required for exit()
 #include <iostream> //required for std::cout
-
+#include <unistd.h>	//required for usleep
 
 
 using namespace std;
@@ -21,12 +21,17 @@ void* ATMOperator(void* inputData){
 
 	ATMData* ATMdata_ptr=static_cast<ATMData*>(inputData);
 
-	cout << (ATMdata_ptr->getInputFileName()).c_str() << "  " << ATMdata_ptr->getID() << endl;
+//	cout << (ATMdata_ptr->getInputFileName()).c_str() << "  " << ATMdata_ptr->getID() << endl;
 	ifstream fs;
 	fs.open((ATMdata_ptr->getInputFileName()).c_str());
 	string cmdLine;
 
+	//initialize usleep parameters
+	unsigned int ATMSleep=1000000;
+
+
 	while (getline(fs, cmdLine)){
+		usleep(ATMSleep);
 		string args[5];
 		int ind=0;
 		size_t pos;

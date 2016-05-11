@@ -9,6 +9,7 @@
 #include <fstream>
 #include <string>
 #include <stdlib.h>
+#include <stdio.h>
 #include "ATM.h"
 #include "screenPrinter.h"
 

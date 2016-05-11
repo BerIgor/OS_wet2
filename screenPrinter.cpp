@@ -2,6 +2,7 @@
 #include "account.h"
 #include <vector>
 #include <unistd.h>
+#include <stdio.h>
 
 bool allDone;
 
@@ -31,19 +32,6 @@ class accountSorter : public Account {
 
 
 void* printToScreen(void* nothing){
-
-	///////////////////*THE FOLLOWING SECTION IS JUST FOR TESTING*/////
-	Account newAccount1(1234, 1234, 0);
-	accounts.insert(pair<int, Account>(1234,newAccount1));
-	Account newAccount2(5678, 5678, 0);
-	accounts.insert(pair<int, Account>(5678,newAccount2));
-	Account newAccount3(0000, 0000, 0);
-	accounts.insert(pair<int, Account>(0000,newAccount3));
-	/////////////////////*END OF TESTING SECTION*///////////////////////
-
-//actual function starts here
-
-
 	//initialize usleep parameters
 	unsigned int printSleep=50000;
 
@@ -56,6 +44,10 @@ void* printToScreen(void* nothing){
 		for(map<int, Account>::iterator it=accounts.begin(); it!=accounts.end(); it++){
 			aVector.push_back(&(it->second));
 		}
+
+		//clear screen; move cursor to top left;
+		printf("\033[2J");
+		printf("\033[1;1H");
 
 		//following is an example of use
 		for(vector<Account*>::iterator vit=aVector.begin(); vit!=aVector.end(); vit++){
