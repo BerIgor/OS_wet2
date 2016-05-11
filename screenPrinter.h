@@ -12,7 +12,7 @@
  *Parameters: N/A
  *Return: N/A
  */
-void* printToScreen();
+void* printToScreen(void*);
 
 
 #endif /* SCREENPRINTER_H_ */

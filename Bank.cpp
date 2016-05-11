@@ -10,6 +10,7 @@
 #include <string>
 #include <stdlib.h>
 #include "ATM.h"
+#include "screenPrinter.h"
 
 
 using namespace std;
@@ -27,7 +28,7 @@ map<int, Account> accounts;
  */
 
 int main(int argc, char* argv[]){
-	bool allDone=false;
+	allDone=false;
 	//check insufficient parameters
 	if(argc<2){
 		printf("ERROR\n");	//TODO: handle error
@@ -49,10 +50,18 @@ int main(int argc, char* argv[]){
 	//create ouput file
 	fstream outputFile ("log.txt", fstream::out);	//NOTE: this also creates the file. Will overwrite
 
+	//create thread for screen printing
+	pthread_t screenPrinterThread;
+	int bullshit_parameter=9;
+	int trErr=pthread_create(&screenPrinterThread, NULL, printToScreen, &bullshit_parameter);
+	if(trErr!=0){
+		printf("ERROR\n");	//TODO: handle error
+		return -1;
+	}
 	//create threads for each ATM
 	ATMData dataForATMs[ATMCount];	//array to hold data (so as to not lose it)
 	pthread_t ATMs[ATMCount];		//array to hold threads
-	int trErr;
+//	int trErr;
 	for(int i=0; i< ATMCount; i++){
 		//update data array
 		dataForATMs[i].setID(i);
@@ -72,7 +81,8 @@ int main(int argc, char* argv[]){
 		pthread_join(ATMs[i], NULL);
 	}
 	allDone=true;
-
+	//wait for screenPrinter to end
+	pthread_join(screenPrinterThread,NULL);
 	//close output file
 	outputFile.close();
 
