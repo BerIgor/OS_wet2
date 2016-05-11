@@ -6,6 +6,12 @@
 #ifndef SCREENPRINTER_H_
 #define SCREENPRINTER_H_
 
+/*
+ *Name:	printToScreen
+ *Description: Used to print accounts onto screen
+ *Parameters: N/A
+ *Return: N/A
+ */
 void* printToScreen();
 
 
