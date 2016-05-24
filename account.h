@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 
+
 using namespace std;
 
 class Account {
@@ -37,27 +38,30 @@ public:
 	 * Increases the balance with the deposit.
 	 * param[in] account password
 	 * param[in] money amount
-	 * returns -1 on failure - wrong password, 0 on success*/
+	 * returns -1 on failure - wrong password, new balance on success*/
 	int deposit(int password_, int amount){
 		//READERS WRITERS 2016S
 		if (password != password_){
+			sleep(1);
 			return -1;
 		}
 		pthread_mutex_lock(&writeLock);
 		balance = balance + amount;
+		int bal = balance;
 		sleep(1);
 		pthread_mutex_unlock(&writeLock);
-		return 0;
+		return bal;
 	}
 
 	/*Withdrawal method
 	 * Decreases the balance with the amount.
 	 * param[in] account password
 	 * param[in] money amount to withdrawal (POSITIVE!)
-	 * returns -1 on failure - wrong password, -2 - not enough money, 0 on success*/
+	 * returns -1 on failure - wrong password, -2 - not enough money, new balance on success*/
 	int withdrawal(int password_, int amount){
 		//READERS WRITERS 2016S
 		if (password != password_){
+			sleep(1);
 			return -1;
 		}
 		pthread_mutex_lock(&readLock);
@@ -74,13 +78,15 @@ public:
 		}
 		pthread_mutex_unlock(&readLock);
 		if (bal - amount < 0){
+			sleep(1);
 			return -2;
 		}
 		pthread_mutex_lock(&writeLock);
 		balance = balance - amount;
+		bal = balance;
 		sleep(1);
 		pthread_mutex_unlock(&writeLock);
-		return 0;
+		return bal;
 	}
 
 	/*Get balance from ATM method
@@ -90,6 +96,7 @@ public:
 	int get_balance_atm(int password_){
 		//READERS WRITERS 2016S
 		if (password != password_){
+			sleep(1);
 			return -1;
 		}
 		pthread_mutex_lock(&readLock);
@@ -135,9 +142,10 @@ public:
 	 * param[in] account to transfer money to
 	 * param[in] money amount to transfer (POSITIVE!)
 	 * returns -1 on failure - wrong password, -2 failure - not enough money, 0 on success*/
-	int transfer(int password_, Account transfer_to, int amount){
+	int transfer(int password_, Account &transfer_to, int amount){
 		//READERS WRITERS 2016S
 		if (password != password_){
+			sleep(1);
 			return -1;
 		}
 		pthread_mutex_lock(&readLock);
@@ -154,12 +162,14 @@ public:
 		}
 		pthread_mutex_unlock(&readLock);
 		if (bal - amount < 0){
+			sleep(1);
 			return -2;
 		}
 		if (number < transfer_to.number){
 			pthread_mutex_lock(&writeLock);
 			pthread_mutex_lock(&transfer_to.writeLock);
-		} else {
+		}
+		else {
 			pthread_mutex_lock(&transfer_to.writeLock);
 			pthread_mutex_lock(&writeLock);
 		}
@@ -169,7 +179,8 @@ public:
 		if (number < transfer_to.number){
 			pthread_mutex_unlock(&writeLock);
 			pthread_mutex_unlock(&transfer_to.writeLock);
-		} else {
+		}
+		else {
 			pthread_mutex_unlock(&transfer_to.writeLock);
 			pthread_mutex_unlock(&writeLock);
 		}
