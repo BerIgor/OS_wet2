@@ -27,7 +27,7 @@ void* ATMOperator(void* inputData){
 	string cmdLine;
 
 	//initialize usleep parameters
-	unsigned int ATMSleep=1000000;
+	unsigned int ATMSleep=100000;
 
 
 	while (getline(fs, cmdLine)){
