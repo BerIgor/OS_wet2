@@ -18,10 +18,13 @@ using namespace std;
 
 //*******************MUTEX*******************************
 pthread_mutex_t logMutex;
+extern pthread_mutex_t mapWriteLock = PTHREAD_MUTEX_INITIALIZER;
+extern pthread_mutex_t mapReadLock = PTHREAD_MUTEX_INITIALIZER;
 //*******************************************************
 
 extern bool allDone;
 map<int, Account> accounts;
+extern int map_read_cnt = 0;
 
 /*
  *Input: arg#1 is # of ATMs

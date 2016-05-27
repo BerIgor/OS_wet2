@@ -5,7 +5,10 @@
 #include "account.h"
 #include <string>
 
-
+void readLock();
+void writeLock();
+void readUnLock();
+void writeUnLock();
 
 class ATMData {
 private:

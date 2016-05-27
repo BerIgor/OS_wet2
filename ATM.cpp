@@ -8,12 +8,47 @@
 #include <iostream> //required for std::cout
 #include <unistd.h>	//required for usleep
 
+extern pthread_mutex_t mapWriteLock;
+extern pthread_mutex_t mapReadLock;
+extern int map_read_cnt;
+
 
 using namespace std;
+
 
 bool checkPassword(int providedPassword){
 
 	return true;
+}
+
+void readLock(){
+	//READERS WRITERS 2016S
+	pthread_mutex_lock(&mapReadLock);
+	map_read_cnt++;
+	if (map_read_cnt == 1){
+		pthread_mutex_lock(&mapWriteLock);
+	}
+	pthread_mutex_unlock(&mapReadLock);
+}
+
+void writeLock(){
+	//READERS WRITERS 2016S
+	pthread_mutex_lock(&mapWriteLock);
+}
+
+void readUnLock(){
+	//READERS WRITERS 2016S
+	pthread_mutex_lock(&mapReadLock);
+	map_read_cnt--;
+	if (map_read_cnt == 0){
+		pthread_mutex_unlock(&mapWriteLock);
+	}
+	pthread_mutex_unlock(&mapReadLock);
+}
+
+void writeUnLock(){
+	//READERS WRITERS 2016S
+	pthread_mutex_unlock(&mapWriteLock);
 }
 
 
@@ -50,8 +85,11 @@ void* ATMOperator(void* inputData){
 			int accountNumber=atoi(args[1].c_str());
 			int accountPassword=atoi(args[2].c_str());
 			int initialAmount=atoi(args[3].c_str());
+			readLock();
 			map<int, Account>::iterator desiredAccount = accounts.find(accountNumber);
-			if(desiredAccount!=accounts.end()){
+			map<int, Account>::iterator endAcc = accounts.end();
+			readUnLock();
+			if(desiredAccount != endAcc){
 				printf("ERROR: account already exists\n");
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
@@ -61,7 +99,9 @@ void* ATMOperator(void* inputData){
 			}
 			//add account
 			Account newAccount(accountNumber, accountPassword, initialAmount);
+			writeLock();
 			accounts.insert(pair<int, Account>(accountNumber,newAccount));
+			writeUnLock();
 
 			printf("opened new account, number ");
 			LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, newAccount.get_balance(), \
@@ -74,8 +114,11 @@ void* ATMOperator(void* inputData){
 			int accountNumber=atoi(args[1].c_str());
 			int accountPassword=atoi(args[2].c_str());
 			int amount=atoi(args[3].c_str());
+			readLock();
 			map<int, Account>::iterator desiredAccount = accounts.find(accountNumber);
-			if (desiredAccount == accounts.end()){
+			map<int, Account>::iterator endAcc = accounts.end();
+			readUnLock();
+			if (desiredAccount == endAcc){
 				printf("Error <ATM ID>: Your transaction failed – account id %04d does not exist\n",accountNumber);
 				//TODO: handle account doesn't exists
 
@@ -107,8 +150,11 @@ void* ATMOperator(void* inputData){
 			int accountNumber=atoi(args[1].c_str());
 			int accountPassword=atoi(args[2].c_str());
 			int amount=atoi(args[3].c_str());
+			readLock();
 			map<int, Account>::iterator desiredAccount = accounts.find(accountNumber);
-			if (desiredAccount == accounts.end()){
+			map<int, Account>::iterator endAcc = accounts.end();
+			readUnLock();
+			if (desiredAccount == endAcc){
 				printf("Error <ATM ID>: Your transaction failed – account id %04d does not exist\n",accountNumber);
 				//TODO: handle account doesn't exists
 
@@ -148,8 +194,11 @@ void* ATMOperator(void* inputData){
 			printf("got b\n");
 			int accountNumber=atoi(args[1].c_str());
 			int accountPassword=atoi(args[2].c_str());
+			readLock();
 			map<int, Account>::iterator desiredAccount = accounts.find(accountNumber);
-			if (desiredAccount == accounts.end()){
+			map<int, Account>::iterator endAcc = accounts.end();
+			readUnLock();
+			if (desiredAccount == endAcc){
 				printf("Error <ATM ID>: Your transaction failed – account id %04d does not exist\n"\
 						,accountNumber);
 				//TODO: handle account doesn't exists
@@ -183,8 +232,11 @@ void* ATMOperator(void* inputData){
 			int accountPassword=atoi(args[2].c_str());
 			int amount=atoi(args[4].c_str());
 			int targetAccountNumber=atoi(args[3].c_str());
+			readLock();
 			map<int, Account>::iterator desiredAccount = accounts.find(accountNumber);
-			if (desiredAccount == accounts.end()){
+			map<int, Account>::iterator endAcc = accounts.end();
+			readUnLock();
+			if (desiredAccount == endAcc){
 				printf("Error <ATM ID>: Your transaction failed – account id %04d does not exist\n",accountNumber);
 				//TODO: handle account doesn't exists
 
@@ -192,8 +244,11 @@ void* ATMOperator(void* inputData){
 						-1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
 			}
+			readLock();
 			map<int, Account>::iterator targetAccount = accounts.find(targetAccountNumber);
-			if (desiredAccount == accounts.end()){
+			endAcc = accounts.end();
+			readUnLock();
+			if (desiredAccount == endAcc){
 				printf("Error <ATM ID>: Your transaction failed – account id %04d does not exist\n"\
 						,targetAccountNumber);
 				//TODO: handle account doesn't exists
