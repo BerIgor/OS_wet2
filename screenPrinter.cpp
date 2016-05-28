@@ -54,7 +54,7 @@ void* printToScreen(void* nothing){
 		printf("\033[2J");
 		printf("\033[1;1H");
 
-		//following is an example of use
+
 		cout<< "‫‪Current Bank Status‬‬" <<endl;
 		int id = 0;
 		int balance = 0;

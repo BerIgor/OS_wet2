@@ -84,7 +84,6 @@ int main(int argc, char* argv[]){
 	//create threads for each ATM
 	ATMData dataForATMs[ATMCount];	//array to hold data (so as to not lose it)
 	pthread_t ATMs[ATMCount];		//array to hold threads
-//	int trErr;
 	for(int i=0; i< ATMCount; i++){
 		//update data array
 		dataForATMs[i].setID(i);

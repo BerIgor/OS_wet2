@@ -22,8 +22,10 @@ void* CommissionCollect(void*){
 			bankBalance = bankBalance + took;
 			pthread_mutex_unlock(&bankBalanceWriteLock);
 			int id = (*it).second.number;
-//			printf("Bank: commissions of %f % were charged, the bank gaind %d $ from account %d\n"\
-//					, com, took, id);
+/*
+			printf("Bank: commissions of %f % were charged, the bank gaind %d $ from account %d\n"\
+					, com, took, id);
+ */
 			LogData* data=new LogData(-1, id, -1, took, -1, -1, -1, com, COM);
 			writeToLog((void*)data);
 		}
