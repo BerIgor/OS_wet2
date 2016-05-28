@@ -90,6 +90,8 @@ void* ATMOperator(void* inputData){
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_O);
 				writeToLog((void*)data);
+				sleep(1);
+				break;
 				//TODO: handle account already exists
 			}
 			//add account
