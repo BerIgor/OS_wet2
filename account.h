@@ -149,6 +149,10 @@ public:
 			sleep(1);
 			return -1;
 		}
+		if (transfer_to.number == number){
+			sleep(1);
+			return -3;
+		}
 		pthread_mutex_lock(&readLock);
 		read_cnt++;
 		if (read_cnt == 1){
