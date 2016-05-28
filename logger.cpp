@@ -1,6 +1,7 @@
 #include "logger.h"
 #include <fstream>
 #include <stdio.h>	//required for bullshit printing
+#include <iomanip>
 
 using namespace std;
 void* writeToLog(void* _data){
@@ -50,7 +51,7 @@ void* writeToLog(void* _data){
 	case OK_O:			//open okay
 		logFile<<dataP->atmID<<": ";
 		logFile<<"New account id is "<<dataP->id;
-		logFile<<" with password "<<dataP->password;
+		logFile<<" with password "<<setfill('0') <<setw(4)<< dataP->password;
 		logFile<<" and initial balance "<<dataP->balance<<endl;
 		break;
 	case OK_D:			//deposit okay
