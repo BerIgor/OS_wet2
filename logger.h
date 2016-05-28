@@ -38,6 +38,7 @@ public:
 	double comPrecent;
 	LogType type;
 
+	//C'TOR
 	LogData(int _atmID, int _id, int _password, int _balance, \
 				int _amount, int _targetID, int _targetBalance, double _comPrecent, LogType _type){
 		atmID=_atmID+1;
