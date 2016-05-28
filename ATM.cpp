@@ -122,6 +122,8 @@ void* ATMOperator(void* inputData){
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
+				sleep(1);
+				break;
 			}
 			int res = (*desiredAccount).second.deposit(accountPassword,amount);
 			//TODO: actually write it to the log
@@ -158,6 +160,8 @@ void* ATMOperator(void* inputData){
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
+				sleep(1);
+				break;
 			}
 			int res = (*desiredAccount).second.withdrawal(accountPassword,amount);
 			if (res == -1){
@@ -203,6 +207,8 @@ void* ATMOperator(void* inputData){
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
+				sleep(1);
+				break;
 			}
 			int res = (*desiredAccount).second.get_balance_atm(accountPassword);
 			if (res == -1){
@@ -240,6 +246,9 @@ void* ATMOperator(void* inputData){
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
+				sleep(1);
+				break;
+
 			}
 			readLock();
 			map<int, Account>::iterator targetAccount = accounts.find(targetAccountNumber);
@@ -253,6 +262,8 @@ void* ATMOperator(void* inputData){
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
+				sleep(1);
+				break;
 			}
 			int res = (*desiredAccount).second.transfer(accountPassword,(*targetAccount).second,amount);
 			if (res == -1){
