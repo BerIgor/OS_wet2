@@ -46,13 +46,11 @@ int main(int argc, char* argv[]){
 	//handle input
 	//NOTE: argv[0] is prog. name; argv[1] is atm count; argv[2] is first file
 	int ATMCount=atoi(argv[1]);
-//	printf("there are %d ATMs\n",ATMCount);
 	if(ATMCount != (argc-2)){	//checks provided number of ATMs corresponds with number of provided input files
-		printf("ERROR: not enough input files\n");	//TODO: handle error
+		printf("ERROR: illegal arguments\n");
 		return -1;
 	}
 
-//	int ATMCount=1;
 
 	//initialize mutex'es
 	pthread_mutex_init(&logMutex, NULL);

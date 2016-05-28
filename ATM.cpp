@@ -123,7 +123,7 @@ void* ATMOperator(void* inputData){
 				}
 				else {
 					LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-							(*desiredAccount).second.get_balance(), -1, -1, -1, -1, OK_D);
+							(*desiredAccount).second.get_balance(), amount, -1, -1, -1, OK_D);
 					writeToLog((void*)data);
 				}
 			}
@@ -226,10 +226,6 @@ void* ATMOperator(void* inputData){
 						LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, \
 								-1, amount, -1,	-1, -1, BAD_T_BALANCE);
 						writeToLog((void*)data);
-					} else if(res == -3){
-						LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
-								-1, -1, -1, -1,  BAD_ACCOUNT);
-						writeToLog((void*)data);
 					}
 					else {
 						LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
@@ -243,7 +239,7 @@ void* ATMOperator(void* inputData){
 
 
 		else {
-			printf("ERROR\n");	//TODO: handle bad command
+			//can't reach it. the input is valid
 		}
 	}
 

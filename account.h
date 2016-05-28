@@ -151,7 +151,7 @@ public:
 		}
 		if (transfer_to.number == number){
 			sleep(1);
-			return -3;
+			return 0;
 		}
 		pthread_mutex_lock(&readLock);
 		read_cnt++;
