@@ -12,19 +12,24 @@
 #include <stdio.h>
 #include "ATM.h"
 #include "screenPrinter.h"
+#include "commission.h"
 
 
 using namespace std;
 
 //*******************MUTEX*******************************
 pthread_mutex_t logMutex;
-extern pthread_mutex_t mapWriteLock = PTHREAD_MUTEX_INITIALIZER;
-extern pthread_mutex_t mapReadLock = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mapWriteLock;
+pthread_mutex_t mapReadLock;
+pthread_mutex_t bankBalanceWriteLock;
+pthread_mutex_t bankBalanceReadLock;
 //*******************************************************
 
 extern bool allDone;
 map<int, Account> accounts;
-extern int map_read_cnt = 0;
+int map_read_cnt = 0;
+int bankBalance = 0;
+int balance_read_cnt = 0;
 
 /*
  *Input: arg#1 is # of ATMs
@@ -41,14 +46,20 @@ int main(int argc, char* argv[]){
 	//handle input
 	//NOTE: argv[0] is prog. name; argv[1] is atm count; argv[2] is first file
 	int ATMCount=atoi(argv[1]);
+	printf("there are %d ATMs\n",ATMCount);
 	if(ATMCount != (argc-2)){	//checks provided number of ATMs corresponds with number of provided input files
 		printf("ERROR\n");	//TODO: handle error
 		return -1;
 	}
 
+//	int ATMCount=1;
 
 	//initialize mutex'es
 	pthread_mutex_init(&logMutex, NULL);
+	pthread_mutex_init(&mapWriteLock, NULL);
+	pthread_mutex_init(&mapReadLock, NULL);
+	pthread_mutex_init(&bankBalanceWriteLock, NULL);
+	pthread_mutex_init(&bankBalanceReadLock, NULL);
 
 
 	//create ouput file
@@ -62,6 +73,16 @@ int main(int argc, char* argv[]){
 		printf("ERROR\n");	//TODO: handle error
 		return -1;
 	}
+
+	//create thread for commissions
+	pthread_t commissionThread;
+	bullshit_parameter=9;
+	trErr=pthread_create(&commissionThread, NULL, CommissionCollect, &bullshit_parameter);
+	if(trErr!=0){
+		printf("ERROR\n");	//TODO: handle error
+		return -1;
+	}
+
 	//create threads for each ATM
 	ATMData dataForATMs[ATMCount];	//array to hold data (so as to not lose it)
 	pthread_t ATMs[ATMCount];		//array to hold threads
@@ -87,6 +108,13 @@ int main(int argc, char* argv[]){
 	allDone=true;
 	//wait for screenPrinter to end
 	pthread_join(screenPrinterThread,NULL);
+	pthread_join(commissionThread,NULL);
+	//destroy all mutex
+	pthread_mutex_destroy(&logMutex);
+	pthread_mutex_destroy(&mapWriteLock);
+	pthread_mutex_destroy(&mapReadLock);
+	pthread_mutex_destroy(&bankBalanceWriteLock);
+	pthread_mutex_destroy(&bankBalanceReadLock);
 	//close output file
 	outputFile.close();
 

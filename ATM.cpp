@@ -16,11 +16,6 @@ extern int map_read_cnt;
 using namespace std;
 
 
-bool checkPassword(int providedPassword){
-
-	return true;
-}
-
 void readLock(){
 	//READERS WRITERS 2016S
 	pthread_mutex_lock(&mapReadLock);
@@ -93,7 +88,7 @@ void* ATMOperator(void* inputData){
 				printf("ERROR: account already exists\n");
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
-						-1, -1, -1,  BAD_O);
+						-1, -1, -1, -1,  BAD_O);
 				writeToLog((void*)data);
 				//TODO: handle account already exists
 			}
@@ -103,9 +98,9 @@ void* ATMOperator(void* inputData){
 			accounts.insert(pair<int, Account>(accountNumber,newAccount));
 			writeUnLock();
 
-			printf("opened new account, number ");
+			printf("opened new account, number %d\n",accountNumber);
 			LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, newAccount.get_balance(), \
-					-1, -1, -1,  OK_O);
+					-1, -1, -1, -1,  OK_O);
 			writeToLog((void*)data);
 
 		}
@@ -123,7 +118,7 @@ void* ATMOperator(void* inputData){
 				//TODO: handle account doesn't exists
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
-						-1, -1, -1,  BAD_ACCOUNT);
+						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
 			}
 			int res = (*desiredAccount).second.deposit(accountPassword,amount);
@@ -133,14 +128,14 @@ void* ATMOperator(void* inputData){
 						,accountNumber);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, -1, \
-						-1, -1, -1, BAD_D);
+						-1, -1, -1, -1, BAD_D);
 				writeToLog((void*)data);
 			}
 			else {
 				printf("<ATM ID>: Account %04d new balance is %d after %d $ was deposited\n",accountNumber,res,amount);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-						(*desiredAccount).second.get_balance(), -1, -1, -1, OK_D);
+						(*desiredAccount).second.get_balance(), -1, -1, -1, -1, OK_D);
 				writeToLog((void*)data);
 			}
 		}
@@ -159,7 +154,7 @@ void* ATMOperator(void* inputData){
 				//TODO: handle account doesn't exists
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
-						-1, -1, -1,  BAD_ACCOUNT);
+						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
 			}
 			int res = (*desiredAccount).second.withdrawal(accountPassword,amount);
@@ -168,7 +163,7 @@ void* ATMOperator(void* inputData){
 						,accountNumber);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, -1, \
-						-1, -1, -1, BAD_W_PASSWORD);
+						-1, -1, -1, -1, BAD_W_PASSWORD);
 				writeToLog((void*)data);
 			}
 			else if (res == -2){
@@ -176,7 +171,7 @@ void* ATMOperator(void* inputData){
 						,accountNumber,amount);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, -1, \
-						-1, -1, -1, BAD_W_BALANCE);
+						-1, -1, -1, -1, BAD_W_BALANCE);
 				writeToLog((void*)data);
 			}
 			else {
@@ -184,7 +179,7 @@ void* ATMOperator(void* inputData){
 						accountNumber,res,amount);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-						(*desiredAccount).second.get_balance(), amount, -1, -1, OK_W);
+						(*desiredAccount).second.get_balance(), amount, -1, -1, -1, OK_W);
 				writeToLog((void*)data);
 			}
 		}
@@ -204,7 +199,7 @@ void* ATMOperator(void* inputData){
 				//TODO: handle account doesn't exists
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
-						-1, -1, -1,  BAD_ACCOUNT);
+						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
 			}
 			int res = (*desiredAccount).second.get_balance_atm(accountPassword);
@@ -213,14 +208,14 @@ void* ATMOperator(void* inputData){
 						,accountNumber);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, \
-						-1, -1, -1, -1, BAD_B);
+						-1, -1, -1, -1, -1, BAD_B);
 				writeToLog((void*)data);
 			}
 			else {
 				printf("<ATM ID>: Account %04d balance is %d\n",accountNumber,res);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-						(*desiredAccount).second.get_balance(), -1, -1, -1, OK_B);
+						(*desiredAccount).second.get_balance(), -1, -1, -1, -1, OK_B);
 				writeToLog((void*)data);
 			}
 		}
@@ -241,7 +236,7 @@ void* ATMOperator(void* inputData){
 				//TODO: handle account doesn't exists
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
-						-1, -1, -1,  BAD_ACCOUNT);
+						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
 			}
 			readLock();
@@ -254,7 +249,7 @@ void* ATMOperator(void* inputData){
 				//TODO: handle account doesn't exists
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
-						-1, -1, -1,  BAD_ACCOUNT);
+						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
 			}
 			int res = (*desiredAccount).second.transfer(accountPassword,(*targetAccount).second,amount);
@@ -263,7 +258,7 @@ void* ATMOperator(void* inputData){
 						,accountNumber);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, \
-						-1, -1, -1,	-1, BAD_T_PASSWORD);
+						-1, -1, -1,	-1, -1, BAD_T_PASSWORD);
 				writeToLog((void*)data);
 			}
 			else if (res == -2){
@@ -271,7 +266,7 @@ void* ATMOperator(void* inputData){
 						,accountNumber,amount);
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, \
-						-1, amount, -1,	-1, BAD_T_BALANCE);
+						-1, amount, -1,	-1, -1, BAD_T_BALANCE);
 				writeToLog((void*)data);
 			}
 			else {
@@ -282,7 +277,7 @@ void* ATMOperator(void* inputData){
 
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
 						(*desiredAccount).second.get_balance(), amount, targetAccountNumber,\
-						(*targetAccount).second.get_balance(), OK_T);
+						(*targetAccount).second.get_balance(), -1, OK_T);
 				writeToLog((void*)data);
 			}
 		}

@@ -22,7 +22,8 @@ enum LogType {
 	OK_D,			//deposit okay
 	OK_W,			//withdraw okay
 	OK_B,			//balance okay
-	OK_T			//transfer okay
+	OK_T,			//transfer okay
+	COM				//took commision
 };
 
 class LogData{
@@ -34,10 +35,11 @@ public:
 	int amount;
 	int targetID;
 	int targetBalance;
+	double comPrecent;
 	LogType type;
 
 	LogData(int _atmID, int _id, int _password, int _balance, \
-				int _amount, int _targetID, int _targetBalance, LogType _type){
+				int _amount, int _targetID, int _targetBalance, double _comPrecent, LogType _type){
 		atmID=_atmID;
 		id=_id;
 		password=_password;
@@ -45,6 +47,7 @@ public:
 		amount=_amount;
 		targetID=_targetID;
 		targetBalance=_targetBalance;
+		comPrecent = _comPrecent;
 		type=_type;
 	};
 };

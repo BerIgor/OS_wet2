@@ -9,7 +9,10 @@
 using namespace std;
 
 bool allDone;
-
+extern int balance_read_cnt;
+extern int bankBalance;
+extern pthread_mutex_t bankBalanceWriteLock;
+extern pthread_mutex_t bankBalanceReadLock;
 
 
 #include <iostream>	//TODO: remove. only used for testing
@@ -33,7 +36,7 @@ class accountSorter : public Account {
 
 void* printToScreen(void* nothing){
 	//initialize usleep parameters
-	unsigned int printSleep=50000;
+	unsigned int printSleep=500000;
 
 	//repeat until Bank program is still running
 	while(allDone==false){
@@ -51,7 +54,6 @@ void* printToScreen(void* nothing){
 		printf("\033[2J");
 		printf("\033[1;1H");
 
-		int money = 0;
 		//following is an example of use
 		cout<< "‫‪Current Bank Status‬‬" <<endl;
 		int id = 0;
@@ -68,6 +70,20 @@ void* printToScreen(void* nothing){
 			cout<< " $ , Account Password - ";
 			cout<< setfill('0') << setw(4) << password << endl;
 		}
+		pthread_mutex_lock(&bankBalanceReadLock);
+		balance_read_cnt++;
+		if (balance_read_cnt == 1){
+			pthread_mutex_lock(&bankBalanceWriteLock);
+		}
+		pthread_mutex_unlock(&bankBalanceReadLock);
+		int money = bankBalance;
+		pthread_mutex_lock(&bankBalanceReadLock);
+		balance_read_cnt--;
+		if (balance_read_cnt == 0){
+			pthread_mutex_unlock(&bankBalanceWriteLock);
+		}
+		pthread_mutex_unlock(&bankBalanceReadLock);
+
 		cout << "The Bank has " << money << " $"<<endl;
 	}
 

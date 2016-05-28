@@ -77,6 +77,10 @@ void* writeToLog(void* _data){
 		logFile<<" new account balance is "<<dataP->balance;
 		logFile<<" new target account balance is "<<dataP->targetBalance<<endl;
 		break;
+	case COM:			//bank took commission
+		logFile<<"‫‪Bank: commissions of ‬‬"<<dataP->comPrecent;
+		logFile<<" % were charged, the bank gained "<<dataP->balance;
+		logFile<<" $ from account "<<dataP->id<<endl;
 	}
 
 

@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <map>
 #include <unistd.h>
+#include <math.h> //for round function
 
 
 
@@ -185,6 +186,19 @@ public:
 			pthread_mutex_unlock(&writeLock);
 		}
 		return 0;
+	}
+
+	/*Commission method
+	 * takes a precent of commision to the bank
+	 * param[in] precent to take
+	 * returns the amount taken*/
+	int takeCommission(double precent){
+	//READERS WRITERS 2016S
+		pthread_mutex_lock(&writeLock);
+		int took = (int)round(balance*precent);
+		balance = balance - took;
+		pthread_mutex_unlock(&writeLock);
+		return took;
 	}
 
 };
