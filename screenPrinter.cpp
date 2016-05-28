@@ -66,7 +66,7 @@ void* printToScreen(void* nothing){
 			cout<< "Account ";
 			cout<< id;
 			cout<< " :Balance - ";
-			cout<< setw(4) <<balance;
+			cout<< setfill(' ') <<setw(4) <<balance;
 			cout<< " $ , Account Password - ";
 			cout<< setfill('0') << setw(4) << password << endl;
 		}

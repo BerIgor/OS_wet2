@@ -40,7 +40,7 @@ public:
 
 	LogData(int _atmID, int _id, int _password, int _balance, \
 				int _amount, int _targetID, int _targetBalance, double _comPrecent, LogType _type){
-		atmID=_atmID;
+		atmID=_atmID+1;
 		id=_id;
 		password=_password;
 		balance=_balance;

@@ -40,7 +40,7 @@ int main(int argc, char* argv[]){
 	allDone=false;
 	//check insufficient parameters
 	if(argc<2){
-		printf("ERROR\n");	//TODO: handle error
+		printf("ERROR: not enough arguments\n");	//TODO: handle error
 		return -1;
 	}
 	//handle input
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]){
 	int ATMCount=atoi(argv[1]);
 	printf("there are %d ATMs\n",ATMCount);
 	if(ATMCount != (argc-2)){	//checks provided number of ATMs corresponds with number of provided input files
-		printf("ERROR\n");	//TODO: handle error
+		printf("ERROR: not enough input files\n");	//TODO: handle error
 		return -1;
 	}
 
@@ -70,16 +70,16 @@ int main(int argc, char* argv[]){
 	int bullshit_parameter=9;
 	int trErr=pthread_create(&screenPrinterThread, NULL, printToScreen, &bullshit_parameter);
 	if(trErr!=0){
-		printf("ERROR\n");	//TODO: handle error
+		printf("ERROR: print thread\n");	//TODO: handle error
 		return -1;
 	}
 
 	//create thread for commissions
 	pthread_t commissionThread;
-	bullshit_parameter=9;
-	trErr=pthread_create(&commissionThread, NULL, CommissionCollect, &bullshit_parameter);
+	int parameter=2;
+	trErr=pthread_create(&commissionThread, NULL, CommissionCollect, &parameter);
 	if(trErr!=0){
-		printf("ERROR\n");	//TODO: handle error
+		printf("ERROR: commission thread\n");	//TODO: handle error
 		return -1;
 	}
 
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]){
 		//create thread
 		trErr=pthread_create(&ATMs[i], NULL, ATMOperator, &dataForATMs[i]);
 		if(trErr!=0){
-			printf("ERROR\n");	//TODO: handle error
+			printf("ERROR: ATM thread number %d\n",i);	//TODO: handle error
 			return -1;
 		}
 	}

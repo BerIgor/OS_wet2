@@ -7,8 +7,7 @@ void* writeToLog(void* _data){
 	LogData* dataP=static_cast<LogData*>(_data);
 
 	pthread_mutex_lock(&logMutex);
-	ofstream logFile;
-	logFile.open("log.txt");
+	ofstream logFile("log.txt", ios::app);
 
 	switch(dataP->type){
 	case BAD_O:			//account open failed
@@ -78,7 +77,7 @@ void* writeToLog(void* _data){
 		logFile<<" new target account balance is "<<dataP->targetBalance<<endl;
 		break;
 	case COM:			//bank took commission
-		logFile<<"‫‪Bank: commissions of ‬‬"<<dataP->comPrecent;
+		logFile<<"Bank: commissions of "<<dataP->comPrecent;
 		logFile<<" % were charged, the bank gained "<<dataP->balance;
 		logFile<<" $ from account "<<dataP->id<<endl;
 	}
