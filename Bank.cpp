@@ -62,13 +62,16 @@ int main(int argc, char* argv[]){
 
 	//create ouput file
 	fstream outputFile ("log.txt", fstream::out);	//NOTE: this also creates the file. Will overwrite
+	if(!outputFile){
+		fputs("Error opening log.txt\n", stderr);
+	}
 
 	//create thread for screen printing
 	pthread_t screenPrinterThread;
 	int bullshit_parameter=9;
 	int trErr=pthread_create(&screenPrinterThread, NULL, printToScreen, &bullshit_parameter);
 	if(trErr!=0){
-		printf("ERROR: print thread\n");	//TODO: handle error
+		fputs("ERROR: failed to create screenPrinter thread\n", stderr);
 		return -1;
 	}
 
@@ -77,7 +80,8 @@ int main(int argc, char* argv[]){
 	int parameter=2;
 	trErr=pthread_create(&commissionThread, NULL, CommissionCollect, &parameter);
 	if(trErr!=0){
-		printf("ERROR: commission thread\n");	//TODO: handle error
+//		printf("ERROR: commission thread\n");	//TODO: handle error
+		fputs("ERROR: failed to create commission thread\n", stderr);
 		return -1;
 	}
 
@@ -91,7 +95,8 @@ int main(int argc, char* argv[]){
 		//create thread
 		trErr=pthread_create(&ATMs[i], NULL, ATMOperator, &dataForATMs[i]);
 		if(trErr!=0){
-			printf("ERROR: ATM thread number %d\n",i);	//TODO: handle error
+//			printf("ERROR: ATM thread number %d\n",i);	//TODO: handle error
+			fputs("ERROR: failed creating ATM thread\n", stderr);
 			return -1;
 		}
 	}

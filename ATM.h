@@ -25,18 +25,22 @@ public:
 		id=-1;
 	}
 
+	/*DSCRIPTION: method will return the inputFileName*/
 	string getInputFileName() const {
 		return inputFileName;
 	}
 
+	/*DSCRIPTION: method will return the ATM id*/
 	int getID() const {
 		return id;
 	}
 
+	/*DSCRIPTION: method will set the input file name*/
 	void setInputFileName(string nameToSet){
 		inputFileName=nameToSet;
 	}
 
+	/*DSCRIPTION: method will set the ATM id*/
 	void setID(int idToSet){
 		id=idToSet;
 	}
@@ -44,7 +48,9 @@ public:
 
 
 
-
+/*DESCRIPTION: Function to handle all ATM operation
+ *PARAM: inputData of ATMData type will contain all relevant data to ATMs' operation
+ */
 void* ATMOperator(void* inputData);
 
 

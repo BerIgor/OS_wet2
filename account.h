@@ -32,9 +32,7 @@ public:
 		pthread_mutex_destroy(&readLock);
 	}
 
-//	Account& transfer(Account& targetAccount){
-//
-//	}
+
 	/*Deposit method
 	 * Increases the balance with the deposit.
 	 * param[in] account password

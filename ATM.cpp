@@ -56,7 +56,7 @@ void* ATMOperator(void* inputData){
 	string cmdLine;
 
 	//initialize usleep parameters
-	unsigned int ATMSleep=100000;
+	unsigned int ATMSleep=100000;	//100mSec
 
 
 	while (getline(fs, cmdLine)){
@@ -151,7 +151,7 @@ void* ATMOperator(void* inputData){
 				}
 				else if (res == -2){
 					LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, -1, \
-							-1, -1, -1, -1, BAD_W_BALANCE);
+							amount, -1, -1, -1, BAD_W_BALANCE);
 					writeToLog((void*)data);
 				}
 				else {
@@ -210,8 +210,8 @@ void* ATMOperator(void* inputData){
 				map<int, Account>::iterator targetAccount = accounts.find(targetAccountNumber);
 				endAcc = accounts.end();
 				readUnLock();
-				if (desiredAccount == endAcc){
-					LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
+				if (targetAccount == endAcc){
+					LogData* data=new LogData(ATMdata_ptr->getID(), targetAccountNumber, -1, -1, \
 							-1, -1, -1, -1,  BAD_ACCOUNT);
 					writeToLog((void*)data);
 					sleep(1);
@@ -239,7 +239,6 @@ void* ATMOperator(void* inputData){
 
 
 		else {
-			//can't reach it. the input is valid
 		}
 	}
 
