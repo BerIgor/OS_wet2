@@ -84,18 +84,17 @@ void* ATMOperator(void* inputData){
 			map<int, Account>::iterator endAcc = accounts.end();
 			readUnLock();
 			if(desiredAccount != endAcc){
-
+				sleep(1);
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_O);
 				writeToLog((void*)data);
-				sleep(1);
 			} else {
 				//add account
 				Account newAccount(accountNumber, accountPassword, initialAmount);
 				writeLock();
 				accounts.insert(pair<int, Account>(accountNumber,newAccount));
 				writeUnLock();
-				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, newAccount.get_balance(), \
+				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, initialAmount, \
 						-1, -1, -1, -1,  OK_O);
 				writeToLog((void*)data);
 			}
@@ -110,10 +109,10 @@ void* ATMOperator(void* inputData){
 			map<int, Account>::iterator endAcc = accounts.end();
 			readUnLock();
 			if (desiredAccount == endAcc){
+				sleep(1);
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
-				sleep(1);
 			} else {
 				int res = (*desiredAccount).second.deposit(accountPassword,amount);
 				if (res == -1){
@@ -138,10 +137,10 @@ void* ATMOperator(void* inputData){
 			map<int, Account>::iterator endAcc = accounts.end();
 			readUnLock();
 			if (desiredAccount == endAcc){
+				sleep(1);
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
-				sleep(1);
 			} else {
 				int res = (*desiredAccount).second.withdrawal(accountPassword,amount);
 				if (res == -1){
@@ -171,10 +170,10 @@ void* ATMOperator(void* inputData){
 			map<int, Account>::iterator endAcc = accounts.end();
 			readUnLock();
 			if (desiredAccount == endAcc){
+				sleep(1);
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
-				sleep(1);
 			} else {
 				int res = (*desiredAccount).second.get_balance_atm(accountPassword);
 				if (res == -1){
@@ -201,20 +200,20 @@ void* ATMOperator(void* inputData){
 			map<int, Account>::iterator endAcc = accounts.end();
 			readUnLock();
 			if (desiredAccount == endAcc){
+				sleep(1);
 				LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, -1, \
 						-1, -1, -1, -1,  BAD_ACCOUNT);
 				writeToLog((void*)data);
-				sleep(1);
 			} else {
 				readLock();
 				map<int, Account>::iterator targetAccount = accounts.find(targetAccountNumber);
 				endAcc = accounts.end();
 				readUnLock();
 				if (targetAccount == endAcc){
+					sleep(1);
 					LogData* data=new LogData(ATMdata_ptr->getID(), targetAccountNumber, -1, -1, \
 							-1, -1, -1, -1,  BAD_ACCOUNT);
 					writeToLog((void*)data);
-					sleep(1);
 				} else {
 					int traget_balance = 0;
 					int res = (*desiredAccount).second.transfer(accountPassword,(*targetAccount).second,amount,&traget_balance);

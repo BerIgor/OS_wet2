@@ -104,6 +104,7 @@ public:
 			pthread_mutex_lock(&writeLock);
 		}
 		pthread_mutex_unlock(&readLock);
+		sleep(1);
 		int bal = balance;
 		pthread_mutex_lock(&readLock);
 		read_cnt--;
@@ -111,7 +112,7 @@ public:
 			pthread_mutex_unlock(&writeLock);
 		}
 		pthread_mutex_unlock(&readLock);
-		sleep(1);
+//		sleep(1);
 		return bal;
 	}
 
