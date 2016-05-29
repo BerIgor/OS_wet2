@@ -65,7 +65,7 @@ void* printToScreen(void* nothing){
 			password = (*vit)->password;
 			cout<< "Account ";
 			cout<< id;
-			cout<< " :Balance - ";
+			cout<< ": Balance - ";
 			cout<< setfill(' ') <<setw(4) <<balance;
 			cout<< " $ , Account Password - ";
 			cout<< setfill('0') << setw(4) << password << endl;

@@ -140,8 +140,9 @@ public:
 	 * param[in] account password
 	 * param[in] account to transfer money to
 	 * param[in] money amount to transfer (POSITIVE!)
-	 * returns -1 on failure - wrong password, -2 failure - not enough money, 0 on success*/
-	int transfer(int password_, Account &transfer_to, int amount){
+	 * param[out] 
+	 * returns -1 on failure - wrong password, -2 failure - not enough money, account balance on success*/
+	int transfer(int password_, Account &transfer_to, int amount, int *targetBal){
 		//READERS WRITERS 2016S
 		if (password != password_){
 			sleep(1);
@@ -177,7 +178,9 @@ public:
 			pthread_mutex_lock(&writeLock);
 		}
 		balance = balance - amount;
+		bal = balance;
 		transfer_to.balance = transfer_to.balance + amount;
+		(*targetBal) = transfer_to.balance;
 		sleep(1);
 		if (number < transfer_to.number){
 			pthread_mutex_unlock(&writeLock);
@@ -187,7 +190,7 @@ public:
 			pthread_mutex_unlock(&transfer_to.writeLock);
 			pthread_mutex_unlock(&writeLock);
 		}
-		return 0;
+		return bal;
 	}
 
 	/*Commission method

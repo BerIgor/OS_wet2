@@ -1,6 +1,6 @@
 #include "logger.h"
 #include <fstream>
-#include <stdio.h>	//required for bullshit printing
+#include <stdio.h>
 #include <iomanip>
 
 using namespace std;

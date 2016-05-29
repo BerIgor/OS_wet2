@@ -1,8 +1,4 @@
-/*
- * Hi there! Do you have beautiful long hair? Are you using Eclipse? Is your name Olga? Then the following message is for you
- * You need to include the pthread library into Eclipse for shit to work:
- * Project -> properties -> C/C++ Build -> Settings -> Cross G++ Linker -> add -lpthread (you only type in 'pthread')
- */
+
 
 
 #include <pthread.h>
@@ -40,7 +36,7 @@ int main(int argc, char* argv[]){
 	allDone=false;
 	//check insufficient parameters
 	if(argc<2){
-		printf("ERROR: not enough arguments\n");	//TODO: handle error
+		printf("ERROR: not enough arguments\n");
 		return -1;
 	}
 	//handle input
@@ -68,8 +64,8 @@ int main(int argc, char* argv[]){
 
 	//create thread for screen printing
 	pthread_t screenPrinterThread;
-	int bullshit_parameter=9;
-	int trErr=pthread_create(&screenPrinterThread, NULL, printToScreen, &bullshit_parameter);
+	int needed_parameter=9;
+	int trErr=pthread_create(&screenPrinterThread, NULL, printToScreen, &needed_parameter);
 	if(trErr!=0){
 		fputs("ERROR: failed to create screenPrinter thread\n", stderr);
 		return -1;
@@ -80,7 +76,6 @@ int main(int argc, char* argv[]){
 	int parameter=2;
 	trErr=pthread_create(&commissionThread, NULL, CommissionCollect, &parameter);
 	if(trErr!=0){
-//		printf("ERROR: commission thread\n");	//TODO: handle error
 		fputs("ERROR: failed to create commission thread\n", stderr);
 		return -1;
 	}
@@ -95,7 +90,6 @@ int main(int argc, char* argv[]){
 		//create thread
 		trErr=pthread_create(&ATMs[i], NULL, ATMOperator, &dataForATMs[i]);
 		if(trErr!=0){
-//			printf("ERROR: ATM thread number %d\n",i);	//TODO: handle error
 			fputs("ERROR: failed creating ATM thread\n", stderr);
 			return -1;
 		}

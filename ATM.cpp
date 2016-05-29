@@ -123,7 +123,7 @@ void* ATMOperator(void* inputData){
 				}
 				else {
 					LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-							(*desiredAccount).second.get_balance(), amount, -1, -1, -1, OK_D);
+							res, amount, -1, -1, -1, OK_D);
 					writeToLog((void*)data);
 				}
 			}
@@ -156,7 +156,7 @@ void* ATMOperator(void* inputData){
 				}
 				else {
 					LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-							(*desiredAccount).second.get_balance(), amount, -1, -1, -1, OK_W);
+							res, amount, -1, -1, -1, OK_W);
 					writeToLog((void*)data);
 				}
 			}
@@ -184,7 +184,7 @@ void* ATMOperator(void* inputData){
 				}
 				else {
 					LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-							(*desiredAccount).second.get_balance(), -1, -1, -1, -1, OK_B);
+							res, -1, -1, -1, -1, OK_B);
 					writeToLog((void*)data);
 				}
 			}
@@ -216,7 +216,8 @@ void* ATMOperator(void* inputData){
 					writeToLog((void*)data);
 					sleep(1);
 				} else {
-					int res = (*desiredAccount).second.transfer(accountPassword,(*targetAccount).second,amount);
+					int traget_balance = 0;
+					int res = (*desiredAccount).second.transfer(accountPassword,(*targetAccount).second,amount,&traget_balance);
 					if (res == -1){
 						LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, -1, \
 								-1, -1, -1,	-1, -1, BAD_T_PASSWORD);
@@ -229,8 +230,8 @@ void* ATMOperator(void* inputData){
 					}
 					else {
 						LogData* data=new LogData(ATMdata_ptr->getID(), accountNumber, accountPassword, \
-								(*desiredAccount).second.get_balance(), amount, targetAccountNumber,\
-								(*targetAccount).second.get_balance(), -1, OK_T);
+								res, amount, targetAccountNumber,\
+								traget_balance, -1, OK_T);
 						writeToLog((void*)data);
 					}
 				}
