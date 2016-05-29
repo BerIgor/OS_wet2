@@ -28,4 +28,4 @@ screenPrinter.o: screenPrinter.cpp screenPrinter.h account.h ATM.h
 	$(CC) $(CFLAGS) -o $@ screenPrinter.cpp
 
 clean:
-	$(RM) $Bank *.o *~ "#"* core.*
+	$(RM) Bank *.o *~ "#"* core.*

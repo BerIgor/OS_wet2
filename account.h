@@ -149,8 +149,12 @@ public:
 			return -1;
 		}
 		if (transfer_to.number == number){
+			pthread_mutex_lock(&writeLock);
+			int bal = balance;
+			(*targetBal) = transfer_to.balance;
+			pthread_mutex_unlock(&writeLock);
 			sleep(1);
-			return 0;
+			return bal;
 		}
 		pthread_mutex_lock(&readLock);
 		read_cnt++;
